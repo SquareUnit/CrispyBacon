@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Script/InputMaster.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Script/Inputs/InputMaster.inputactions'
 
 using System;
 using System.Collections;
@@ -19,20 +19,20 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""id"": ""4324a46f-87a7-4ca1-8504-eb6f7406d1a2"",
             ""actions"": [
                 {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""829ebcf8-71ef-4532-a8f2-99f38ff3d463"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""StickDeadzone(max=1)"",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Charge"",
                     ""type"": ""Button"",
                     ""id"": ""6e2a6b49-b1a5-4cc7-bbf0-9cd635734a11"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
-                },
-                {
-                    ""name"": ""Movement"",
-                    ""type"": ""Value"",
-                    ""id"": ""829ebcf8-71ef-4532-a8f2-99f38ff3d463"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""StickDeadzone"",
-                    ""interactions"": """"
                 },
                 {
                     ""name"": ""AirBreaks"",
@@ -123,8 +123,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Charge = m_Player.FindAction("Charge", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_Charge = m_Player.FindAction("Charge", throwIfNotFound: true);
         m_Player_AirBreaks = m_Player.FindAction("AirBreaks", throwIfNotFound: true);
     }
 
@@ -175,15 +175,15 @@ public class @InputMaster : IInputActionCollection, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_Charge;
     private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_Charge;
     private readonly InputAction m_Player_AirBreaks;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
         public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Charge => m_Wrapper.m_Player_Charge;
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @Charge => m_Wrapper.m_Player_Charge;
         public InputAction @AirBreaks => m_Wrapper.m_Player_AirBreaks;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -194,12 +194,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
-                @Charge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharge;
-                @Charge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharge;
-                @Charge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharge;
                 @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Charge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharge;
+                @Charge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharge;
+                @Charge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharge;
                 @AirBreaks.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAirBreaks;
                 @AirBreaks.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAirBreaks;
                 @AirBreaks.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAirBreaks;
@@ -207,12 +207,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Charge.started += instance.OnCharge;
-                @Charge.performed += instance.OnCharge;
-                @Charge.canceled += instance.OnCharge;
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @Charge.started += instance.OnCharge;
+                @Charge.performed += instance.OnCharge;
+                @Charge.canceled += instance.OnCharge;
                 @AirBreaks.started += instance.OnAirBreaks;
                 @AirBreaks.performed += instance.OnAirBreaks;
                 @AirBreaks.canceled += instance.OnAirBreaks;
@@ -240,8 +240,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnCharge(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
+        void OnCharge(InputAction.CallbackContext context);
         void OnAirBreaks(InputAction.CallbackContext context);
     }
 }

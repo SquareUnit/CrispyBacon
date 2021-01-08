@@ -6,20 +6,20 @@
             "id": "4324a46f-87a7-4ca1-8504-eb6f7406d1a2",
             "actions": [
                 {
+                    "name": "Movement",
+                    "type": "Value",
+                    "id": "829ebcf8-71ef-4532-a8f2-99f38ff3d463",
+                    "expectedControlType": "Vector2",
+                    "processors": "StickDeadzone(max=1)",
+                    "interactions": ""
+                },
+                {
                     "name": "Charge",
                     "type": "Button",
                     "id": "6e2a6b49-b1a5-4cc7-bbf0-9cd635734a11",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
-                },
-                {
-                    "name": "Movement",
-                    "type": "Value",
-                    "id": "829ebcf8-71ef-4532-a8f2-99f38ff3d463",
-                    "expectedControlType": "Vector2",
-                    "processors": "StickDeadzone",
-                    "interactions": ""
                 },
                 {
                     "name": "AirBreaks",

@@ -9,6 +9,7 @@
 /[Bb]uild/
 /[Bb]uilds/
 /CrispyBacon/[Ll]ogs/
+/CrispyBacon/[Pp]rojectSettings/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
