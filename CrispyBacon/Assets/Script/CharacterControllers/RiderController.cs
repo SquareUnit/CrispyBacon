@@ -8,29 +8,46 @@ public class RiderController : MonoBehaviour
     public PlayerCamera playerCamera;
     public PlayerCamera playerCameraRef;
     private Rigidbody rb;
+    public Rigidbody Rb { get => rb; set => rb = value; }
     [Tooltip("The height of the camera target, relative to root GO origin")]
     public float height = 1;
     [Tooltip("Is the controller currently moving?")]
     public bool controllerInMovement;
 
+    // State Machine
+    public StateMachine controllerStateMachine;
+    public ControllerDefaultState defaultState;
+    public ControllerChargeState chargeState;
+
     // Rotation
     private Quaternion desiredRotation;
     private Quaternion currentRotation;
     private float rotationTarget;
+    private float rotationSpeed;
+
+    public Quaternion DesiredRotation { get => desiredRotation; set => desiredRotation = value; }
+    public Quaternion CurrentRotation { get => currentRotation; set => currentRotation = value; }
+    public float RotationTarget { get => rotationTarget; set => rotationTarget = value; }
+    public float RotationSpeed { get => rotationSpeed; set => rotationSpeed = value; }
+
     [Tooltip("How fast the craft attains it's maximum turn amplitude")]
     public float rotationAcceleration = 0.5f;
-    private float rotationSpeed;
     [Tooltip("How sharp the craft can turn")]
     public float rotationMaximumSpeed = 12.0f;
     [Tooltip("How fast the craft naturally lose turn momentum")]
     public float rotationDragStrength = 0.975f;
 
     // Position
+    private Vector3 directionVector;
+    private float movementSpeed;
+
+    public Vector3 DirectionVector { get => directionVector; set => directionVector = value; }
+    public float MovementSpeed { get => movementSpeed; set => movementSpeed = value; }
+
     [Tooltip("How fast the craft gain forward speed")]
     public float movementAcceleration = 0.25f;
-    private float movementSpeed;
     [Tooltip("The maximum speed the craft can reach")]
-    public float movementMaximumSpeed = 20.0f;
+    public float movementMaximumSpeed = 18.5f;
 
     //Stats
     public float weight;
@@ -46,12 +63,18 @@ public class RiderController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         inputSystem = GetComponent<InputSystem>();
         playerCamera = Instantiate(playerCameraRef, transform.position, transform.rotation, transform);
+
+        controllerStateMachine = GetComponent<StateMachine>();
+        defaultState = new ControllerDefaultState(this);
+        chargeState = new ControllerChargeState(this);
+
+        controllerStateMachine.ChangeState(defaultState);
     }
 
     void FixedUpdate()
     {
-        UpdateRotation();
-        UpdatePosition();
+        controllerStateMachine.CheckIfStateChange();
+        controllerStateMachine.CurrentStateUpdate();
 
         if (rb.velocity != new Vector3(0, 0, 0))
         {
@@ -61,46 +84,5 @@ public class RiderController : MonoBehaviour
         {
             controllerInMovement = false;
         }
-    }
-
-    private void UpdateRotation()
-    {
-        if (inputSystem.IsMovementPerformed)
-        {
-            rotationSpeed += rotationAcceleration;
-            rotationSpeed = Mathf.Clamp(rotationSpeed, 0.0f, rotationMaximumSpeed);
-            Debug.Log(rotationSpeed);
-            rotationTarget = inputSystem.Direction.x * rotationSpeed;
-        }
-        else
-        {
-            if (rotationTarget != 0.0f)
-            {
-                if (Mathf.Abs(rotationTarget) < 0.001f)
-                {
-                    rotationTarget = 0.0f;
-                    rotationSpeed = 0.0f;
-                    Debug.Log(rotationSpeed);
-                }
-                else
-                {
-                    rotationTarget *= rotationDragStrength;
-                    rotationSpeed -= rotationAcceleration;
-                    rotationSpeed = Mathf.Clamp(rotationSpeed, 0.0f, rotationMaximumSpeed);
-                    Debug.Log(rotationSpeed);
-                }
-            }
-        }
-
-        desiredRotation = Quaternion.Euler(0.0f, transform.eulerAngles.y + rotationTarget, 0.0f);
-        currentRotation = Quaternion.Lerp(currentRotation, desiredRotation, 0.11f);
-        transform.rotation = currentRotation;
-    }
-
-    private void UpdatePosition()
-    {
-        movementSpeed += movementAcceleration;
-        movementSpeed = Mathf.Clamp(movementSpeed, 0.0f, movementMaximumSpeed);
-        rb.velocity = transform.forward * movementSpeed;
     }
 }

@@ -5,8 +5,8 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     public bool debugEnabled;
-    private IStates currentState;
-    private IStates previousState;
+    public IStates currentState;
+    public IStates previousState;
 
     /////////////////////////////////////////////////////////////
     ///                     Machine Logic                     ///
@@ -34,7 +34,6 @@ public class StateMachine : MonoBehaviour
         if (currentState != null)
         {
             currentState.IfStateChange();
-            if (debugEnabled) PrintLog(currentState.StateName, stateChange);
         }
     }
 

@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 8483505109710927360}
   - component: {fileID: 8483505109710927363}
   - component: {fileID: -673268729974223552}
+  - component: {fileID: 3962092685790294156}
   - component: {fileID: 8483505109710927364}
   m_Layer: 0
   m_Name: Rider
@@ -147,6 +148,7 @@ MonoBehaviour:
   playerCameraRef: {fileID: 7561293397909243488, guid: 07693feb91a99504cbbf18fef6081cb2, type: 3}
   height: 1.75
   controllerInMovement: 0
+  controllerStateMachine: {fileID: 0}
   rotationAcceleration: 0.75
   rotationMaximumSpeed: 15
   rotationDragStrength: 0.95
@@ -173,6 +175,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugIsEnabled: 0
   inputsAreEnabled: 1
+--- !u!114 &3962092685790294156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8483505109710927365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ca0ce72ffb6e504ebcab524836bb60c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugEnabled: 0
 --- !u!54 &8483505109710927364
 Rigidbody:
   m_ObjectHideFlags: 0

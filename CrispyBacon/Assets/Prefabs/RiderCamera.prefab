@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4913887667523262578}
   - component: {fileID: 7561293397909243488}
-  - component: {fileID: -8974325006919623265}
   - component: {fileID: -7913572329006461447}
+  - component: {fileID: -3609736219625187167}
   m_Layer: 0
   m_Name: RiderCamera
   m_TagString: Untagged
@@ -65,19 +65,6 @@ MonoBehaviour:
   isColliding: 0
   debugMode: 0
   raycastsDebug: 1
---- !u!114 &-8974325006919623265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3667553760813083893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ca0ce72ffb6e504ebcab524836bb60c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugEnabled: 0
 --- !u!20 &-7913572329006461447
 Camera:
   m_ObjectHideFlags: 0
@@ -121,3 +108,16 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &-3609736219625187167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3667553760813083893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ca0ce72ffb6e504ebcab524836bb60c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugEnabled: 0

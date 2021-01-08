@@ -11,11 +11,15 @@ public class InputSystem : MonoBehaviour
     public Vector2 Direction { get => direction; }
     private bool isMovementPerformed;
     public bool IsMovementPerformed { get => isMovementPerformed; }
+    private bool isCharging;
+    public bool IsCharging { get => isCharging; }
 
     void Awake()
     {
         controls = new InputMaster();
-        controls.Player.Charge.performed += _ => Charge();
+        controls.Player.Charge.started += _ => ChargeStarted();
+        controls.Player.Charge.performed += _ => ChargePerformed();
+        controls.Player.Charge.canceled += _ => ChargeCanceled();
         controls.Player.AirBreaks.performed += _ => AirBreaks();
         controls.Player.Movement.performed += ctx => MovementPerformed(ctx.ReadValue<Vector2>());
         controls.Player.Movement.canceled += ctx => MovementCancelled();
@@ -25,7 +29,7 @@ public class InputSystem : MonoBehaviour
     {
         if(inputsAreEnabled)
         {
-            //Debug.Log("Movement Performed");
+            //Debug.Log("Steering");
             direction = _direction;
             isMovementPerformed = true;
         }
@@ -35,16 +39,33 @@ public class InputSystem : MonoBehaviour
     {
         if (inputsAreEnabled)
         {
-            //Debug.Log("Movement Cancelled");
+            //Debug.Log("Not steering");
             isMovementPerformed = false;
         }
     }
-
-    private void Charge()
+    private void ChargeStarted()
     {
         if (inputsAreEnabled)
         {
-            Debug.Log("Charge performed");
+            //Debug.Log("Charging Initiating");
+            isCharging = true;
+        }
+    }
+
+    private void ChargePerformed()
+    {
+        if (inputsAreEnabled)
+        {
+            //Debug.Log("Charging");
+        }
+    }
+
+    private void ChargeCanceled()
+    {
+        if (inputsAreEnabled)
+        {
+            //Debug.Log("Charging Canceled");
+            isCharging = false;
         }
     }
 
@@ -52,7 +73,7 @@ public class InputSystem : MonoBehaviour
     {
         if (inputsAreEnabled)
         {
-            Debug.Log("Airbreak performed");
+            //Debug.Log("Airbreak performed");
         }
         
     }
