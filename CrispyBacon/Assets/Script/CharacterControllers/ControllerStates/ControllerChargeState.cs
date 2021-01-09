@@ -17,7 +17,8 @@ public class ControllerChargeState : IStates
 
     public void Enter()
     {
-
+        // Remember forward vector, create the sliding effect
+        user.DirectionVector = user.transform.forward;
     }
 
     public void IfStateChange()
@@ -41,39 +42,46 @@ public class ControllerChargeState : IStates
 
     private void UpdateRotation()
     {
+        // Determin speed change
         if (user.inputSystem.IsMovementPerformed)
         {
             user.RotationSpeed += user.rotationAcceleration;
-            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0.0f, user.rotationMaximumSpeed);
-            user.RotationTarget = user.inputSystem.Direction.x * user.RotationSpeed;
+
+            if (user.inputSystem.SteeringDirectionReversed)
+            {
+                user.RotationSpeed *= 0.50f;
+                user.inputSystem.SteeringDirectionReversed = false;
+                Debug.Log("<color=red>Direction Reversed</color>");
+            }
         }
         else
         {
-            if (user.RotationTarget != 0.0f)
-            {
-                if (Mathf.Abs(user.RotationTarget) < 0.001f)
-                {
-                    user.RotationTarget = 0.0f;
-                    user.RotationSpeed = 0.0f;
-                }
-                else
-                {
-                    user.RotationTarget *= user.rotationDragStrength;
-                    user.RotationSpeed -= user.rotationAcceleration;
-                    user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0.0f, user.rotationMaximumSpeed);
-                }
-            }
+             user.RotationSpeed -= user.rotationAcceleration;
         }
 
-        user.DesiredRotation = Quaternion.Euler(0.0f, user.transform.eulerAngles.y + user.RotationTarget, 0.0f);
+        if (user.Rb.velocity.x < 0.01f && user.Rb.velocity.y < 0.01f && user.Rb.velocity.z < 0.01f)
+        {
+            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 2.5f);
+        }
+        else
+        {
+            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed);
+        }
+
+        // Find rotation angle
+        user.RotationTargetAngle = user.inputSystem.LeftStick.x * user.RotationSpeed;
+
+        Debug.Log(user.RotationSpeed);
+        user.DesiredRotation = Quaternion.Euler(0, user.transform.eulerAngles.y + user.RotationTargetAngle, 0);
         user.CurrentRotation = Quaternion.Lerp(user.CurrentRotation, user.DesiredRotation, 0.11f);
         user.transform.rotation = user.CurrentRotation;
     }
 
     private void UpdateDirection()
     {
-        user.MovementSpeed -= user.movementAcceleration / 2;
-        user.MovementSpeed = Mathf.Clamp(user.MovementSpeed, 0.0f, user.movementMaximumSpeed);
+        // Set acceleration
+        user.MovementSpeed -= user.movementAcceleration * 0.55f;
+        user.MovementSpeed = Mathf.Clamp(user.MovementSpeed, 0, user.movementMaximumSpeed);
         user.Rb.velocity = user.DirectionVector * user.MovementSpeed;
     }
 }

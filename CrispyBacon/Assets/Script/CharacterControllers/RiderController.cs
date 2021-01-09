@@ -22,12 +22,12 @@ public class RiderController : MonoBehaviour
     // Rotation
     private Quaternion desiredRotation;
     private Quaternion currentRotation;
-    private float rotationTarget;
+    private float rotationTargetAngle;
     private float rotationSpeed;
 
     public Quaternion DesiredRotation { get => desiredRotation; set => desiredRotation = value; }
     public Quaternion CurrentRotation { get => currentRotation; set => currentRotation = value; }
-    public float RotationTarget { get => rotationTarget; set => rotationTarget = value; }
+    public float RotationTargetAngle { get => rotationTargetAngle; set => rotationTargetAngle = value; }
     public float RotationSpeed { get => rotationSpeed; set => rotationSpeed = value; }
 
     [Tooltip("How fast the craft attains it's maximum turn amplitude")]
@@ -45,7 +45,7 @@ public class RiderController : MonoBehaviour
     public float MovementSpeed { get => movementSpeed; set => movementSpeed = value; }
 
     [Tooltip("How fast the craft gain forward speed")]
-    public float movementAcceleration = 0.25f;
+    public float movementAcceleration = 0.6f;
     [Tooltip("The maximum speed the craft can reach")]
     public float movementMaximumSpeed = 18.5f;
 

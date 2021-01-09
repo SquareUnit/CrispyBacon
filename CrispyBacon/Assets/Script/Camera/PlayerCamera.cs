@@ -200,8 +200,8 @@ public class PlayerCamera : MonoBehaviour
             for (int i = 1; i <= sideRayCount; i++)
             {
                 // Rays position and yaw adjustment strength
-                float raysLateralOffsets = Mathf.Abs(inputSystem.Direction.magnitude) * rayOffset * i / sideRayCount;
-                float yawAdjustment = (1 + Mathf.Abs(inputSystem.Direction.magnitude)) * speedCorrection * i / sideRayCount; // Recheck line algo
+                float raysLateralOffsets = Mathf.Abs(inputSystem.LeftStick.magnitude) * rayOffset * i / sideRayCount;
+                float yawAdjustment = (1 + Mathf.Abs(inputSystem.LeftStick.magnitude)) * speedCorrection * i / sideRayCount; // Recheck line algo
 
                 // Right parallel ray(s)
                 rayOrigin = transform.position + (raysLateralOffsets * transform.right);

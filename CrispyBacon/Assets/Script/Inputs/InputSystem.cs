@@ -7,12 +7,22 @@ public class InputSystem : MonoBehaviour
     public InputMaster controls;
     public bool debugIsEnabled = false;
     public bool inputsAreEnabled = true;
-    private Vector2 direction;
-    public Vector2 Direction { get => direction; }
+
+    private Vector2 lastLeftStickValue = new Vector2(0, 0);
+
+    private Vector2 leftstick;
     private bool isMovementPerformed;
-    public bool IsMovementPerformed { get => isMovementPerformed; }
     private bool isCharging;
+    private bool steeringDirectionReversed = false;
+
+    public Vector2 LeftStick { get => leftstick; }
+    public bool IsMovementPerformed { get => isMovementPerformed; }
     public bool IsCharging { get => isCharging; }
+    public bool SteeringDirectionReversed 
+    { 
+        get => steeringDirectionReversed; 
+        set => steeringDirectionReversed = value; 
+    }
 
     void Awake()
     {
@@ -25,12 +35,20 @@ public class InputSystem : MonoBehaviour
         controls.Player.Movement.canceled += ctx => MovementCancelled();
     }
 
-    private void MovementPerformed(Vector2 _direction)
+    private void Update()
+    {
+
+    }
+
+    private void MovementPerformed(Vector2 _leftStick)
     {
         if(inputsAreEnabled)
         {
             //Debug.Log("Steering");
-            direction = _direction;
+            leftstick = _leftStick;
+            CheckForSteeringDirectionChange();
+            //if (steeringDirectionHasChanged) Debug.Log("Steering Direction Changed");
+            lastLeftStickValue = _leftStick;
             isMovementPerformed = true;
         }
     }
@@ -75,7 +93,17 @@ public class InputSystem : MonoBehaviour
         {
             //Debug.Log("Airbreak performed");
         }
-        
+    }
+
+    /// <summary> Check if the player is suddently changing the direction he's turning</summary>
+    private void CheckForSteeringDirectionChange()
+    {
+        //Debug.Log($"Last left stick value: {lastLeftStickValue.x} \n Direction is: {direction.x}");
+        if (lastLeftStickValue.x > 0 && leftstick.x <= 0 ||
+            lastLeftStickValue.x < 0 && leftstick.x >= 0)
+        {
+            steeringDirectionReversed = true;
+        }
     }
 
     private void OnEnable()

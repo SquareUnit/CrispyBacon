@@ -149,10 +149,10 @@ MonoBehaviour:
   height: 1.75
   controllerInMovement: 0
   controllerStateMachine: {fileID: 0}
-  rotationAcceleration: 0.75
-  rotationMaximumSpeed: 15
-  rotationDragStrength: 0.95
-  movementAcceleration: 0.5
+  rotationAcceleration: 1.05
+  rotationMaximumSpeed: 22
+  rotationDragStrength: 0.75
+  movementAcceleration: 0.6
   movementMaximumSpeed: 18.5
   weight: 0
   turn: 0
