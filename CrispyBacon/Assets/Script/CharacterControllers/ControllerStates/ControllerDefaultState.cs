@@ -3,8 +3,8 @@ using UnityEngine;
 public class ControllerDefaultState : IStates
 {
     private RiderController user;
-    private Vector3 currentVelocity; // Ref for the smooth damp function
-    private string stateName = "Controller Default State";
+    private Vector3 currentVelocity;
+    private string stateName = "Controller Movement State";
     string IStates.StateName 
     { 
         get => stateName;

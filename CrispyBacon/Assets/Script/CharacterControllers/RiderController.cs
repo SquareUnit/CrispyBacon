@@ -58,6 +58,10 @@ public class RiderController : MonoBehaviour
     public float chargeMeterFillRate = 1;
     public float chargeMeterDepletionRate = 5;
 
+    // Other
+    [Tooltip("The ride is considered immobile below this magnitude threshold.\n It's an adjustment to fit the player perception.")]
+    public float perceivedImmobilityPoint = 2.75f; // Will come in conflict with slopes for rides like the slick star that should forever slide.
+
     //Stats
     public float weight;
     public float turn;
@@ -88,16 +92,26 @@ public class RiderController : MonoBehaviour
 
     void FixedUpdate()
     {
+        CheckIfControllerInMovement();
+
         controllerStateMachine.CheckIfStateChange();
         controllerStateMachine.CurrentStateUpdate();
 
-        if (rb.velocity != new Vector3(0, 0, 0))
+        
+
+    }
+
+    private void CheckIfControllerInMovement()
+    {
+        Debug.Log(rb.velocity.magnitude);
+        if (rb.velocity.magnitude > perceivedImmobilityPoint)
         {
             controllerIsCurrentlyMoving = true;
         }
         else
         {
             controllerIsCurrentlyMoving = false;
+            rb.velocity = new Vector3(0, 0, 0);
         }
     }
 

@@ -61,13 +61,13 @@ public class ControllerChargeState : IStates
              user.RotationSpeed -= user.rotationAcceleration;
         }
 
-        if (user.Rb.velocity.x < 0.01f && user.Rb.velocity.y < 0.01f && user.Rb.velocity.z < 0.01f)
+        if (user.controllerIsCurrentlyMoving)
         {
-            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1.2f); // This is somehow creating an artifact, it sometimes linger past the point
+            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1f);
         }
         else
         {
-            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1.1f);
+            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1.25f);
         }
 
         // Find rotation angle
