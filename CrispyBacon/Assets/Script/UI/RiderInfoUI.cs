@@ -16,7 +16,7 @@ public class RiderInfoUI : MonoBehaviour
     {
         float temp = Truncate(riderController.inputSystem.LeftStick.x, 2);
         textBody[0] = temp.ToString();
-        temp = Truncate(riderController.MovementSpeed, 2);
+        temp = Truncate(riderController.MovementSpeed, 4);
         textBody[1] = temp.ToString();
         temp = Truncate(riderController.RotationSpeed, 2);
         textBody[2] = temp.ToString();

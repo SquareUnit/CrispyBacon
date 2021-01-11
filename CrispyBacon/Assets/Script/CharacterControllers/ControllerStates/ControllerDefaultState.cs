@@ -69,14 +69,16 @@ public class ControllerDefaultState : IStates
         }
         else
         {
-            user.MovementSpeed += user.movementAcceleration;
+            if (user.MovementSpeed < user.movementMaximumSpeed)
+            {
+                user.MovementSpeed += user.movementAcceleration;
+            }
+            else
+            {
+                user.MovementSpeed = Mathf.Lerp(user.MovementSpeed, user.movementMaximumSpeed, 0.03f);
+            }
         }
         
-        if(user.MovementSpeed > user.movementMaximumSpeed)
-        {
-            user.MovementSpeed -= user.movementAcceleration * 1.2f;
-        }
-
         // Set movement
         user.Rb.velocity = Vector3.SmoothDamp(user.Rb.velocity, user.transform.forward * user.MovementSpeed, ref currentVelocity, 0.01f);
     }
