@@ -74,7 +74,7 @@ public class ControllerDefaultState : IStates
         
         if(user.MovementSpeed > user.movementMaximumSpeed)
         {
-            user.MovementSpeed -= user.movementAcceleration * 1.1f;
+            user.MovementSpeed -= user.movementAcceleration * 1.2f;
         }
 
         // Set movement

@@ -328,11 +328,10 @@ MonoBehaviour:
   useRiderUI: 1
   riderUI: {fileID: 929229358461199091, guid: e034d888198eb484c9c0a9e12d604df8, type: 3}
   height: 1.75
-  controllerInMovement: 0
+  controllerIsCurrentlyMoving: 0
   controllerStateMachine: {fileID: 0}
-  rotationAcceleration: 1.05
-  rotationMaximumSpeed: 22
-  rotationDragStrength: 0.75
+  rotationAcceleration: 1
+  rotationMaximumSpeed: 21
   movementAcceleration: 0.6
   movementMaximumSpeed: 18.5
   chargeMeter: 0

@@ -8,15 +8,17 @@ public class InputSystem : MonoBehaviour
     public bool debugIsEnabled = false;
     public bool inputsAreEnabled = true;
 
-    private Vector2 lastLeftStickValue = new Vector2(0, 0);
+    private Vector2 previousLeftStickValue = new Vector2(0, 0);
 
-    private Vector2 leftstick;
-    private bool isMovementPerformed;
+    private Vector2 leftStickValue;
+    private Vector2 targetLeftStickValue;
+    private Vector2 leftStickRef;
+    private bool playerCurrentlySteering;
     private bool isCharging;
     private bool steeringDirectionReversed = false;
 
-    public Vector2 LeftStick { get => leftstick; }
-    public bool IsMovementPerformed { get => isMovementPerformed; }
+    public Vector2 LeftStick { get => leftStickValue; }
+    public bool IsMovementPerformed { get => playerCurrentlySteering; }
     public bool IsCharging { get => isCharging; }
     public bool SteeringDirectionReversed 
     { 
@@ -37,19 +39,16 @@ public class InputSystem : MonoBehaviour
 
     private void Update()
     {
-
+        UpdateSteeringInfo();
+        leftStickValue = Vector2.SmoothDamp(leftStickValue, targetLeftStickValue, ref leftStickRef, 0.04f);
+        //Debug.Log($"Target: {targetLeftStickValue} Value: {leftStickValue}");
     }
 
     private void MovementPerformed(Vector2 _leftStick)
     {
         if(inputsAreEnabled)
         {
-            //Debug.Log("Steering");
-            leftstick = _leftStick;
-            CheckForSteeringDirectionChange();
-            //if (steeringDirectionHasChanged) Debug.Log("Steering Direction Changed");
-            lastLeftStickValue = _leftStick;
-            isMovementPerformed = true;
+            targetLeftStickValue = _leftStick;
         }
     }
 
@@ -57,16 +56,15 @@ public class InputSystem : MonoBehaviour
     {
         if (inputsAreEnabled)
         {
-            //Debug.Log("Not steering");
-            isMovementPerformed = false;
-            leftstick.x = 0;
+            playerCurrentlySteering = false;
+            leftStickValue = new Vector2(0, 0);
+            targetLeftStickValue = new Vector2(0, 0);
         }
     }
     private void ChargeStarted()
     {
         if (inputsAreEnabled)
         {
-            //Debug.Log("Charging Initiating");
             isCharging = true;
         }
     }
@@ -96,15 +94,25 @@ public class InputSystem : MonoBehaviour
         }
     }
 
-    /// <summary> Check if the player is suddently changing the direction he's turning</summary>
-    private void CheckForSteeringDirectionChange()
+    private void UpdateSteeringInfo()
     {
-        //Debug.Log($"Last left stick value: {lastLeftStickValue.x} \n Direction is: {direction.x}");
-        if (lastLeftStickValue.x > 0 && leftstick.x <= 0 ||
-            lastLeftStickValue.x < 0 && leftstick.x >= 0)
+        // Validate if player is currently steering
+        if (targetLeftStickValue.x > 0 || targetLeftStickValue.x < 0)
+        {
+            playerCurrentlySteering = true;
+        }
+        else
+        {
+            return;
+        }
+        
+        // Validate if player has drastically reversed direction
+        if (previousLeftStickValue.x > 0 && targetLeftStickValue.x < 0 ||
+            previousLeftStickValue.x < 0 && targetLeftStickValue.x > 0)
         {
             steeringDirectionReversed = true;
         }
+        previousLeftStickValue = targetLeftStickValue;
     }
 
     private void OnEnable()
