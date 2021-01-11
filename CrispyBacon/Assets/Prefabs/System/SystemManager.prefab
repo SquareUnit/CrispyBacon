@@ -43,4 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0599bb9c2fe490b448b03ab12f6ad11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  riderUI: {fileID: 8266983511049764673, guid: e034d888198eb484c9c0a9e12d604df8, type: 3}
   riderPrefab: {fileID: 8483505109710927365, guid: 34e09756774558249a57534db417ac89, type: 3}

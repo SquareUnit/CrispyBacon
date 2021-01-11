@@ -3,6 +3,7 @@ using UnityEngine;
 public class ControllerDefaultState : IStates
 {
     private RiderController user;
+    private Vector3 currentVelocity; // Ref for the smooth damp function
     private string stateName = "Controller Default State";
     string IStates.StateName 
     { 
@@ -15,29 +16,21 @@ public class ControllerDefaultState : IStates
         user = _userController;
     }
 
-    public void Enter()
-    {
-
-    }
+    public void Enter() {}
 
     public void IfStateChange()
     {
-        if(user.inputSystem.IsCharging)
-        {
-            user.controllerStateMachine.ChangeState(user.chargeState);
-        }
+        if(user.inputSystem.IsCharging) user.controllerStateMachine.ChangeState(user.chargeState);
     }
 
     public void StateUpdate()
     {
         UpdateRotation();
         UpdateDirection();
+        user.DepleteChargeMeter();
     }
 
-    public void Exit()
-    {
-
-    }
+    public void Exit() {}
 
     private void UpdateRotation()
     {
@@ -50,7 +43,6 @@ public class ControllerDefaultState : IStates
             {
                 user.RotationSpeed *= 0.18f;
                 user.inputSystem.SteeringDirectionReversed = false;
-                Debug.Log("<color=red>Direction Reversed</color>");
             }
         }
         else
@@ -66,18 +58,26 @@ public class ControllerDefaultState : IStates
         user.DesiredRotation = Quaternion.Euler(0.0f, user.transform.eulerAngles.y + user.RotationTargetAngle, 0);
         user.CurrentRotation = Quaternion.Lerp(user.CurrentRotation, user.DesiredRotation, 0.11f);
         user.transform.rotation = user.CurrentRotation;
-        Debug.Log($"Speed : {user.RotationSpeed} || ROtationAngle : {user.RotationTargetAngle}");
     }
 
     private void UpdateDirection()
     {
         // Determin movement speed
-        user.MovementSpeed += user.movementAcceleration;
-        user.MovementSpeed = Mathf.Clamp(user.MovementSpeed, 0, user.movementMaximumSpeed);
+        if(user.chargeMeter != 0)
+        {
+            user.MovementSpeed += user.movementAcceleration * (7 * (user.chargeMeter / user.chargeMeterMaximumCapacity));
+        }
+        else
+        {
+            user.MovementSpeed += user.movementAcceleration;
+        }
+        
+        if(user.MovementSpeed > user.movementMaximumSpeed)
+        {
+            user.MovementSpeed -= user.movementAcceleration * 1.1f;
+        }
 
         // Set movement
-        user.Rb.velocity = user.transform.forward * user.MovementSpeed;
+        user.Rb.velocity = Vector3.SmoothDamp(user.Rb.velocity, user.transform.forward * user.MovementSpeed, ref currentVelocity, 0.01f);
     }
-
-
 }

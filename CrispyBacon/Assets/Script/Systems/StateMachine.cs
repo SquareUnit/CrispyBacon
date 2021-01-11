@@ -62,7 +62,7 @@ public class StateMachine : MonoBehaviour
     /////////////////////////////////////////////////////////////
 
     private readonly string enterState = "<color=yellow>State Enter</color>";
-    private readonly string stateChange = "<color=purple>Switching State</color>";
+    //private readonly string stateChange = "<color=purple>Switching State</color>";
     private readonly string updateState = "<color=blue>State update</color>";
     private readonly string exitState = "<color=yellow>State Exit</color>";
 

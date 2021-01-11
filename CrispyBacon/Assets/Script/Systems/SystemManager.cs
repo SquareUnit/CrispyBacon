@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 namespace MainSystem
@@ -7,13 +6,18 @@ namespace MainSystem
     {
         private SystemManager instance;
         private static readonly object padlock = new object();
-
         public GameObject riderPrefab;
 
         private void Start()
         {
             InitSystems();
             InitPlayers();
+            InitUI();
+        }
+
+        public void Update()
+        {
+
         }
 
         private void InitSystems()
@@ -24,6 +28,11 @@ namespace MainSystem
         private void InitPlayers()
         {
             Instantiate(riderPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        }
+
+        private void InitUI()
+        {
+
         }
 
         #region Properties

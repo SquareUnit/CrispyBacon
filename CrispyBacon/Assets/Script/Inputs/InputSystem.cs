@@ -59,6 +59,7 @@ public class InputSystem : MonoBehaviour
         {
             //Debug.Log("Not steering");
             isMovementPerformed = false;
+            leftstick.x = 0;
         }
     }
     private void ChargeStarted()

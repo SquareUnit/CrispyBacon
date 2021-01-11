@@ -190,7 +190,7 @@ public class PlayerCamera : MonoBehaviour
     /// <summary> Cast rays parallel to the camera forward vector. Nudge the camera yaw in the opposite direction if one or multiple collides. </summary>
     private void CameraSideRays(float sideRayCount, float rayOffset)
     {
-        if (riderController.controllerInMovement && !isColliding)
+        if (riderController.controllerIsCurrentlyMoving && !isColliding)
         {
             Vector3 rayOrigin;
             Vector3 rayDir;

@@ -8,11 +8,14 @@ public class RiderController : MonoBehaviour
     public PlayerCamera playerCamera;
     public PlayerCamera playerCameraRef;
     private Rigidbody rb;
+    public bool useRiderUI;
+    public RiderInfoUI riderUI;
+
     public Rigidbody Rb { get => rb; set => rb = value; }
     [Tooltip("The height of the camera target, relative to root GO origin")]
     public float height = 1;
     [Tooltip("Is the controller currently moving?")]
-    public bool controllerInMovement;
+    public bool controllerIsCurrentlyMoving;
 
     // State Machine
     public StateMachine controllerStateMachine;
@@ -34,8 +37,8 @@ public class RiderController : MonoBehaviour
     public float rotationAcceleration = 0.5f;
     [Tooltip("How sharp the craft can turn")]
     public float rotationMaximumSpeed = 12.0f;
-    [Tooltip("How fast the craft naturally lose turn momentum")]
-    public float rotationDragStrength = 0.975f;
+    //[Tooltip("How fast the craft naturally lose turn momentum")] 
+    //public float rotationDragStrength = 0.975f;
 
     // Position
     private Vector3 directionVector;
@@ -46,8 +49,14 @@ public class RiderController : MonoBehaviour
 
     [Tooltip("How fast the craft gain forward speed")]
     public float movementAcceleration = 0.6f;
-    [Tooltip("The maximum speed the craft can reach")]
+    [Tooltip("The maximum speed the craft can reach by simple acceleration")]
     public float movementMaximumSpeed = 18.5f;
+
+    // Charge
+    public float chargeMeter;
+    public float chargeMeterMaximumCapacity = 0.8f;
+    public float chargeMeterFillRate = 1;
+    public float chargeMeterDepletionRate = 5;
 
     //Stats
     public float weight;
@@ -69,6 +78,12 @@ public class RiderController : MonoBehaviour
         chargeState = new ControllerChargeState(this);
 
         controllerStateMachine.ChangeState(defaultState);
+
+        if(useRiderUI)
+        {
+            riderUI = Instantiate(riderUI, new Vector3(0, 0, 0), Quaternion.identity);
+            riderUI.riderController = this;
+        }
     }
 
     void FixedUpdate()
@@ -78,11 +93,23 @@ public class RiderController : MonoBehaviour
 
         if (rb.velocity != new Vector3(0, 0, 0))
         {
-            controllerInMovement = true;
+            controllerIsCurrentlyMoving = true;
         }
         else
         {
-            controllerInMovement = false;
+            controllerIsCurrentlyMoving = false;
         }
+    }
+
+    public void FillChargeMeter()
+    {
+        chargeMeter += Time.deltaTime * chargeMeterFillRate;
+        chargeMeter = Mathf.Clamp(chargeMeter, 0, chargeMeterMaximumCapacity);
+    }
+
+    public void DepleteChargeMeter()
+    {
+        chargeMeter -= Time.deltaTime * chargeMeterDepletionRate;
+        chargeMeter = Mathf.Clamp(chargeMeter, 0, chargeMeterMaximumCapacity);
     }
 }
