@@ -61,13 +61,13 @@ public class ControllerChargeState : IStates
              user.RotationSpeed -= user.rotationAcceleration;
         }
 
-        if (user.Rb.velocity.x < 0.01f && user.Rb.velocity.y < 0.01f && user.Rb.velocity.z < 0.01f)
+        if (user.controllerIsCurrentlyMoving)
         {
-            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1.2f); // This is somehow creating an artifact, it sometimes linger past the point
+            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1f);
         }
         else
         {
-            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1.1f);
+            user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1.25f);
         }
 
         // Find rotation angle
@@ -86,6 +86,7 @@ public class ControllerChargeState : IStates
 
         directionSmooth += 0.01f;
         user.Rb.velocity = Vector3.SmoothDamp(user.Rb.velocity, Vector3.Normalize(user.DirectionVector + user.transform.forward * 2000) * user.MovementSpeed, ref currentVelocity, directionSmooth);
+        user.Rb.velocity += new Vector3(user.groundHit.normal.x, 0, user.groundHit.normal.z) * 5;
     }
 
     /// Notes on drift

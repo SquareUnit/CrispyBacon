@@ -10,6 +10,11 @@ public class RiderController : MonoBehaviour
     private Rigidbody rb;
     public bool useRiderUI;
     public RiderInfoUI riderUI;
+    private LayerMask pathableSurfacesLayerMask;
+    public LayerMask ObstaclesLayerMask
+    {
+        get { return pathableSurfacesLayerMask; }
+    }
 
     public Rigidbody Rb { get => rb; set => rb = value; }
     [Tooltip("The height of the camera target, relative to root GO origin")]
@@ -58,6 +63,18 @@ public class RiderController : MonoBehaviour
     public float chargeMeterFillRate = 1;
     public float chargeMeterDepletionRate = 5;
 
+    // Collisions
+    public RaycastHit groundHit;
+    private float groundHitRayDistance = 1;
+    private bool isFlying;
+    private Vector3 flatNormal;
+    public Vector3 FlatNormal { get => flatNormal; }
+    public bool IsFlying { get => isFlying; }
+
+    // Other
+    [Tooltip("The ride is considered immobile below this magnitude threshold.\n It's an adjustment to fit the player perception.")]
+    public float perceivedImmobilityPoint = 2.75f; // Will come in conflict with slopes for rides like the slick star that should forever slide.
+
     //Stats
     public float weight;
     public float turn;
@@ -72,6 +89,10 @@ public class RiderController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         inputSystem = GetComponent<InputSystem>();
         playerCamera = Instantiate(playerCameraRef, transform.position, transform.rotation, transform);
+
+        pathableSurfacesLayerMask = 
+            1 << LayerMask.NameToLayer("Ground") |
+            1 << LayerMask.NameToLayer("Obstacles");
 
         controllerStateMachine = GetComponent<StateMachine>();
         defaultState = new ControllerDefaultState(this);
@@ -88,16 +109,49 @@ public class RiderController : MonoBehaviour
 
     void FixedUpdate()
     {
+        CheckIfControllerInMovement();
+        CheckForGroundCollision();
+
         controllerStateMachine.CheckIfStateChange();
         controllerStateMachine.CurrentStateUpdate();
+   
+    }
 
-        if (rb.velocity != new Vector3(0, 0, 0))
+    private void CheckIfControllerInMovement()
+    {
+        if (rb.velocity.magnitude > perceivedImmobilityPoint)
         {
             controllerIsCurrentlyMoving = true;
         }
         else
         {
             controllerIsCurrentlyMoving = false;
+            rb.velocity = new Vector3(0, 0, 0);
+        }
+    }
+
+    private void CheckForGroundCollision()
+    {
+        if (Physics.Raycast(transform.position, -transform.up, out groundHit, groundHitRayDistance, pathableSurfacesLayerMask))
+        {
+            float dotProduct = Vector3.Dot(groundHit.normal, Vector3.up);
+            if (dotProduct <= 0.3 && dotProduct >= -0.3)
+            {
+                // Find precise angle
+                
+            }
+            //Vector3 flatNormal = new Vector3(groundHit.normal.x, 0, groundHit.normal.z);
+            Debug.Log(groundHit.point);
+            
+            isFlying = false;
+            Debug.DrawRay(Vector3.zero, groundHit.point, Color.green);
+            Debug.DrawRay(groundHit.point, new Vector3(groundHit.normal.x, 0, groundHit.normal.z) * 10, Color.blue);
+            Debug.DrawRay(Vector3.zero, groundHit.point + new Vector3(groundHit.normal.x, 0, groundHit.normal.z) * 10, Color.red);
+            // Debug.DrawRay(groundHit.point, Vector3.up * 5, Color.green);
+        }
+        else
+        {
+            isFlying = true;
         }
     }
 
