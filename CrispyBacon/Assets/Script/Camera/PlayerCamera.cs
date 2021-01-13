@@ -34,6 +34,7 @@ public class PlayerCamera : MonoBehaviour
     public float cameraFieldOfView = 60.0f;
     public float yaw, pitch;
     public float smoothTime = 1.000f; // previously 0.022f, was supper stiff for unkown reason
+    public float rotationAngleLerpTime = 0.50f;
     private float YawSpeedDirectControl { get; } = 126.0f;
     private float YawSpeedIndirectControl { get; } = 68.0f;
     private float PitchSpeed { get; } = 110.0f;
@@ -142,7 +143,7 @@ public class PlayerCamera : MonoBehaviour
     {
         yaw = cameraTarget.transform.eulerAngles.y;
         desiredRotation = Quaternion.Euler(pitch, yaw, 0.0f);
-        currRotation = Quaternion.Lerp(currRotation, desiredRotation, 1f);
+        currRotation = Quaternion.Lerp(currRotation, desiredRotation, rotationAngleLerpTime);
         tr.rotation = currRotation;
     }
 
@@ -158,8 +159,7 @@ public class PlayerCamera : MonoBehaviour
         directionToCameraTarget = tr.position - cameraTarget.tr.position;
         if (raycastsDebug) Debug.DrawRay(cameraTarget.tr.position, directionToCameraTarget, Color.gray);
 
-        //if (Physics.SphereCast(camTarget.tr.position, 0.10f,  dirToCamera, out hit, camDollyMaxDist, obstaclesLayerMask)) TODO: Integrate sphere cast
-        if (Physics.Raycast(cameraTarget.tr.position, directionToCameraTarget, out hit, camDollyMaxDist * 2, obstaclesLayerMask))
+        if (Physics.Raycast(cameraTarget.tr.position, directionToCameraTarget, out hit, camDollyMaxDist * 2, obstaclesLayerMask)) // TODO, to SphereCast.
         {
             float product = Vector3.Dot(hit.normal, Vector3.up);
             if (product <= 0.3 && product >= -0.3) // TODO : Handle ceilings(|| hit.normal.y < 0))

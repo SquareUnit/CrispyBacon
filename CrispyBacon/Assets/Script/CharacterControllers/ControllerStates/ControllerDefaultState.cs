@@ -3,8 +3,8 @@ using UnityEngine;
 public class ControllerDefaultState : IStates
 {
     private RiderController user;
-    private Vector3 currentVelocity; // Ref for the smooth damp function
-    private string stateName = "Controller Default State";
+    private Vector3 currentVelocity;
+    private string stateName = "Controller Movement State";
     string IStates.StateName 
     { 
         get => stateName;
@@ -65,7 +65,7 @@ public class ControllerDefaultState : IStates
         // Determin movement speed
         if(user.chargeMeter != 0)
         {
-            user.MovementSpeed += user.movementAcceleration * (7 * (user.chargeMeter / user.chargeMeterMaximumCapacity));
+            user.MovementSpeed += user.movementAcceleration * (5 * (user.chargeMeter / user.chargeMeterMaximumCapacity)); // Make linear and base on a variable named dischargeTime;
         }
         else
         {
