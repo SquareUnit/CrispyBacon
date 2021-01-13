@@ -65,7 +65,7 @@ public class ControllerDefaultState : IStates
         // Determin movement speed
         if(user.chargeMeter != 0)
         {
-            user.MovementSpeed += user.movementAcceleration * (7 * (user.chargeMeter / user.chargeMeterMaximumCapacity));
+            user.MovementSpeed += user.movementAcceleration * (5 * (user.chargeMeter / user.chargeMeterMaximumCapacity)); // Make linear and base on a variable named dischargeTime;
         }
         else
         {

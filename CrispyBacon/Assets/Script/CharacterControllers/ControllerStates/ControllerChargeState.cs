@@ -86,6 +86,7 @@ public class ControllerChargeState : IStates
 
         directionSmooth += 0.01f;
         user.Rb.velocity = Vector3.SmoothDamp(user.Rb.velocity, Vector3.Normalize(user.DirectionVector + user.transform.forward * 2000) * user.MovementSpeed, ref currentVelocity, directionSmooth);
+        user.Rb.velocity += new Vector3(user.groundHit.normal.x, 0, user.groundHit.normal.z) * 5;
     }
 
     /// Notes on drift

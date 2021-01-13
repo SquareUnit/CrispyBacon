@@ -57,6 +57,7 @@ MonoBehaviour:
   yaw: 64.47
   pitch: 58.77
   smoothTime: 1
+  rotationAngleLerpTime: 0.6
   pitchMinimumAngle: -25
   pitchMaximumAngle: 60
   camDollyMinDist: 2.4
@@ -64,7 +65,7 @@ MonoBehaviour:
   desiredCollisionOffset: 0.5
   isColliding: 0
   debugMode: 0
-  raycastsDebug: 1
+  raycastsDebug: 0
 --- !u!20 &-7913572329006461447
 Camera:
   m_ObjectHideFlags: 0
