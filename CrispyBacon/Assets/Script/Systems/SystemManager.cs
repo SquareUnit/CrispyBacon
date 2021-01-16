@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MainSystem
@@ -6,7 +7,8 @@ namespace MainSystem
     {
         private SystemManager instance;
         private static readonly object padlock = new object();
-        public GameObject riderPrefab;
+        public GameObject riderPrefabRef;
+        public List<GameObject> riderInstances = new List<GameObject>();
 
         private void Start()
         {
@@ -27,7 +29,7 @@ namespace MainSystem
 
         private void InitPlayers()
         {
-            Instantiate(riderPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            riderInstances.Add(Instantiate(riderPrefabRef, new Vector3(0, 0, 0), Quaternion.identity));
         }
 
         private void InitUI()
