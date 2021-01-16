@@ -61,7 +61,7 @@ public class ControllerChargeState : IStates
              user.RotationSpeed -= user.rotationAcceleration;
         }
 
-        if (user.controllerIsCurrentlyMoving)
+        if (user.CheckIfControllerInMovement())
         {
             user.RotationSpeed = Mathf.Clamp(user.RotationSpeed, 0, user.rotationMaximumSpeed * 1f);
         }

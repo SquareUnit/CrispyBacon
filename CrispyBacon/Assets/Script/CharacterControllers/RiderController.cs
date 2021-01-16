@@ -19,11 +19,10 @@ public class RiderController : MonoBehaviour
     public Rigidbody Rb { get => rb; set => rb = value; }
     [Tooltip("The height of the camera target, relative to root GO origin")]
     public float height = 1;
-    [Tooltip("Is the controller currently moving?")]
-    public bool controllerIsCurrentlyMoving;
 
     // State Machine
     public StateMachine controllerStateMachine;
+    public ControllerInitState initState;
     public ControllerDefaultState defaultState;
     public ControllerChargeState chargeState;
 
@@ -40,7 +39,7 @@ public class RiderController : MonoBehaviour
 
     [Tooltip("How fast the craft attains it's maximum turn amplitude")]
     public float rotationAcceleration = 0.5f;
-    [Tooltip("How sharp the craft can turn")]
+    [Tooltip("How sharp the craft can turn")] 
     public float rotationMaximumSpeed = 12.0f;
     //[Tooltip("How fast the craft naturally lose turn momentum")] 
     //public float rotationDragStrength = 0.975f;
@@ -90,15 +89,14 @@ public class RiderController : MonoBehaviour
         inputSystem = GetComponent<InputSystem>();
         playerCamera = Instantiate(playerCameraRef, transform.position, transform.rotation, transform);
 
-        pathableSurfacesLayerMask = 
-            1 << LayerMask.NameToLayer("Ground") |
-            1 << LayerMask.NameToLayer("Obstacles");
+        pathableSurfacesLayerMask = LayerMask.GetMask("Grounds", "Obstacles");
 
         controllerStateMachine = GetComponent<StateMachine>();
+        initState = new ControllerInitState(this);
         defaultState = new ControllerDefaultState(this);
         chargeState = new ControllerChargeState(this);
 
-        controllerStateMachine.ChangeState(defaultState);
+        controllerStateMachine.ChangeState(initState);
 
         if(useRiderUI)
         {
@@ -116,18 +114,10 @@ public class RiderController : MonoBehaviour
         controllerStateMachine.CurrentStateUpdate();
    
     }
-
-    private void CheckIfControllerInMovement()
+    
+    public bool CheckIfControllerInMovement()
     {
-        if (rb.velocity.magnitude > perceivedImmobilityPoint)
-        {
-            controllerIsCurrentlyMoving = true;
-        }
-        else
-        {
-            controllerIsCurrentlyMoving = false;
-            rb.velocity = new Vector3(0, 0, 0);
-        }
+        return rb.velocity.magnitude > perceivedImmobilityPoint;
     }
 
     private void CheckForGroundCollision()

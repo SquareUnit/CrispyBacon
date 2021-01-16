@@ -20,12 +20,12 @@ public class StateMachine : MonoBehaviour
         {
             
             currentState.Exit();
-            if (debugEnabled) PrintLog(currentState.StateName, exitState);
+            PrintLog(currentState.StateName, exitState);
             previousState = currentState;
         }
         currentState = newState;
         currentState.Enter();
-        if (debugEnabled) PrintLog(currentState.StateName, enterState);
+        PrintLog(currentState.StateName, enterState);
     }
 
     /// <summary>Contains all logic that verify if current state should be playing it's execute or imediately change to a new state.</summary>
@@ -43,7 +43,7 @@ public class StateMachine : MonoBehaviour
         if (currentState != null)
         {
             currentState.StateUpdate();
-            if (debugEnabled) PrintLog(currentState.StateName, updateState);
+            PrintLog(currentState.StateName, updateState);
         }
     }
 
@@ -51,10 +51,10 @@ public class StateMachine : MonoBehaviour
     public void SwitchToPreviousState()
     {
         currentState.Exit();
-        if (debugEnabled) PrintLog(currentState.StateName, exitState);
+        PrintLog(currentState.StateName, exitState);
         currentState = previousState;
         currentState.Enter();
-        if (debugEnabled) PrintLog(currentState.StateName, enterState);
+        PrintLog(currentState.StateName, enterState);
     }
 
     /////////////////////////////////////////////////////////////
@@ -68,6 +68,9 @@ public class StateMachine : MonoBehaviour
 
     private void PrintLog(string name, string state)
     {
-        Debug.Log($"{name} => {state}");
+        if (debugEnabled)
+        {
+            Debug.Log($"{name} => {state}");
+        } 
     }
 }
