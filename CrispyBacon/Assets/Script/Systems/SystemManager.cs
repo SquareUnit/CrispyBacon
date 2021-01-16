@@ -1,64 +1,41 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace MainSystem
+public class SystemManager : MonoBehaviour
 {
-    public class SystemManager : MonoBehaviour
+    public static SystemManager instance;
+    private static readonly object padlock = new object();
+    public GameObject riderPrefab;
+
+    private void Start()
     {
-        private SystemManager instance;
-        private static readonly object padlock = new object();
-        public GameObject riderPrefabRef;
-        public List<GameObject> riderInstances = new List<GameObject>();
+        instance = this;
 
-        private void Start()
-        {
-            InitSystems();
-            InitPlayers();
-            InitUI();
-        }
+        InitSystems();
+        InitPlayers();
+        InitUI();
+    }
 
-        public void Update()
-        {
+    public void Update()
+    {
 
-        }
+    }
 
-        private void InitSystems()
-        {
+    private void InitSystems()
+    {
 
-        }
+    }
 
-        private void InitPlayers()
-        {
-            riderInstances.Add(Instantiate(riderPrefabRef, new Vector3(0, 0, 0), Quaternion.identity));
-        }
+    private void InitPlayers()
+    {
+        Instantiate(riderPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+    }
 
-        private void InitUI()
-        {
+    private void InitUI()
+    {
 
-        }
-
-        #region Properties
-        public SystemManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (padlock)
-                    {
-                        if (instance == null)
-                        {
-                            instance = this;
-                            DontDestroyOnLoad(this);
-                        }
-                    }
-                }
-                return instance;
-            }
-        }
-        #endregion
     }
 }
+
 
 /*
 
